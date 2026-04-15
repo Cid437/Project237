@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Customer;
+use App\Models\User;
 
 class CustomerController extends Controller
 {
@@ -12,6 +15,8 @@ class CustomerController extends Controller
     public function index()
     {
         //
+        $customers = Customer::all();
+        return response()->json(['customers' => $customers, 'status' => 200]);
     }
 
     /**
@@ -20,6 +25,35 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         //
+        $user = new User([
+            'name' => $request->fname . ' ' . $request->lname,
+            'email' => $request->email,
+            'password' => bcrypt($request->input('password')),
+        ]);
+        $user->save();
+        $customer = new Customer();
+        $customer->user_id = $user->id;
+
+        $customer->lname = $request->lname;
+        $customer->fname = $request->fname;
+        $customer->addressline = $request->addressline;
+
+        $customer->zipcode = $request->zipcode;
+        $customer->phone = $request->phone;
+        $files = $request->file('uploads');
+        $customer->image_path = 'storage/images/' . $files->getClientOriginalName();
+        $customer->save();
+        
+        Storage::put(
+            'public/images/' . $files->getClientOriginalName(),
+            file_get_contents($files)
+        );
+
+        return response()->json([
+            "success" => "customer created successfully.",
+            "customer" => $customer,
+            "status" => 200
+        ]);
     }
 
     /**
