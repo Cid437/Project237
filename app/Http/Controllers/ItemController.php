@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Item;
 
 class ItemController extends Controller
 {
@@ -12,6 +13,8 @@ class ItemController extends Controller
     public function index()
     {
         //
+        $items = Item::with('Stock')->get();
+        return response()->json($items);
     }
 
     /**
@@ -28,6 +31,8 @@ class ItemController extends Controller
     public function show(string $id)
     {
         //
+        $item = Item::with('stock')->where('item_id', $id)->firstOrFail();
+        return response()->json($item);
     }
 
     /**
