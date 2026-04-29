@@ -12,8 +12,6 @@
         php artisan make:model modelName
     Create a view
         php artisan make:view viewName
-    Create a route
-        php artisan make:route routeName
     create a migration
         php artisan make:migration create_tablename_table
     run migration
@@ -29,6 +27,8 @@
     run server
         php artisan serve    
 
+    If not api route
+        php artisan install:api
 --}}
 
 @endsection
