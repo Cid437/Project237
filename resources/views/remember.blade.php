@@ -29,6 +29,12 @@
 
     If not api route
         php artisan install:api
+
+    when cloning this repository
+        composer install
+        cp .env.example .env
+        php artisan key:generate
+        php artisan migrate --seed
 --}}
 
 @endsection
